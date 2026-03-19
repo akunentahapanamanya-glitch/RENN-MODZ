@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Pengalihan Website | Rennmodz</title>
+    <style>
+        /* RESET TOTAL - paksa semua ke tengah dan tidak tembus */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* BODY sebagai flex container yang sempurna */
+        body {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #0c0a20 0%, #1e1a3a 50%, #14122e 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Background bintang - fixed biar ga ikut scroll */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(1px 1px at 15% 25%, #b69eff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 75% 40%, #7f9cf5, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 30% 80%, #c084fc, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 85% 70%, #38bdf8, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 45% 15%, #a78bfa, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 60% 90%, #818cf8, rgba(0,0,0,0));
+            background-size: 250px 250px;
+            background-repeat: repeat;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* WRAPER UTAMA - mengontrol semua biar presisi di tengah */
+        .master-wrapper {
+            width: 100%;
+            max-width: 950px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* CARD UTAMA - presisi senter */
+        .card {
+            width: 100%;
+            background: rgba(18, 10, 35, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(160, 120, 255, 0.25);
+            border-radius: 70px 25px 70px 25px;
+            padding: 3.5rem 3rem;
+            position: relative;
+            z-index: 5;
+            box-shadow: 
+                0 30px 55px -20px #000000cc,
+                0 0 0 1px rgba(200, 160, 255, 0.15) inset,
+                0 0 30px rgba(130, 80, 220, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* Efek glow luar - ga bakal tembus karena diatur dengan absolute dan radius sama */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            background: linear-gradient(125deg, #8b5cf6, #3b82f6, #a855f7, #2563eb, #8b5cf6);
+            border-radius: 78px 33px 78px 33px;
+            opacity: 0.45;
+            z-index: -1;
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        /* Konten wrapper - semua di tengah */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 1.8rem;
+        }
+
+        /* LOGO SECTION - presisi */
+        .logo-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-frame {
+            display: inline-flex;
+            padding: 10px;
+            background: linear-gradient(145deg, #7c3aed, #4f46e5, #9333ea);
+            border-radius: 50px 15px 50px 15px;
+            box-shadow: 0 20px 35px -10px #4c1d95b3;
+        }
+
+        .logo-container {
+            max-width: 260px;
+            width: 100%;
+            border-radius: 45px 12px 45px 12px;
+            overflow: hidden;
+            background: #0b0720;
+            border: 3px solid rgba(200, 160, 255, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover {
+            border-color: #c084fc;
+            box-shadow: 0 0 30px #a855f7;
+            transform: scale(1.02);
+        }
+
+        .logo-container img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: auto;
+            border-radius: 45px 12px 45px 12px;
+        }
+
+        /* TEKS UTAMA */
+        .title-section {
+            text-align: center;
+            width: 100%;
+        }
+
+        .main-title {
+            font-size: 2.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+            background: linear-gradient(145deg, #e0b0ff, #93c5fd, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px #6d28d980;
+            margin-bottom: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .url-container {
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+
+        .url-link {
+            display: inline-block;
+            font-size: 3.1rem;
+            font-weight: 800;
+            text-decoration: none;
+            background: linear-gradient(135deg, #f0d6ff, #b3d9ff, #d9b0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 0.4rem 1.8rem;
+            border: 2px solid rgba(160, 120, 255, 0.3);
+            border-radius: 90px 25px 90px 25px;
+            background-color: rgba(25, 15, 45, 0.4);
+            backdrop-filter: blur(6px);
+            line-height: 1.3;
+            transition: all 0.25s;
+            letter-spacing: -0.01em;
+        }
+
+        .url-link:hover {
+            border-color: #b085f5;
+            background-color: rgba(70, 40, 110, 0.5);
+            box-shadow: 0 0 35px #b380fb;
+            transform: scale(1.02);
+        }
+
+        /* DIVIDER */
+        .divider-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .divider-line {
+            height: 3px;
+            flex: 1 1 100px;
+            background: linear-gradient(90deg, transparent, #b48aff, #6fa8ff, #b48aff, transparent);
+            border-radius: 10px;
+        }
+
+        .divider-icon {
+            color: #c79bff;
+            font-size: 2.2rem;
+            filter: drop-shadow(0 0 12px #aa7eff);
+            line-height: 1;
+        }
+
+        /* INFO PANEL */
+        .info-box {
+            width: 100%;
+            background: rgba(40, 20, 60, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(180, 130, 255, 0.25);
+            border-radius: 60px 18px 60px 18px;
+            padding: 1.4rem 2rem;
+            text-align: center;
+            color: #e2d0ff;
+            font-size: 1.3rem;
+            box-shadow: 0 15px 30px -15px #000000b3;
+        }
+
+        .info-highlight {
+            font-weight: 700;
+            background: linear-gradient(135deg, #e5cdff, #b1d0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.4rem;
+        }
+
+        .info-tag {
+            font-size: 1.1rem;
+            color: #b7a1e6;
+        }
+
+        /* BUTTON GROUP */
+        .button-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .btn {
+            padding: 1.1rem 2.8rem;
+            border-radius: 70px 18px 70px 18px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            backdrop-filter: blur(4px);
+            min-width: 220px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #8b5cf6, #3b82f6);
+            color: white;
+            box-shadow: 0 15px 25px -10px #4c1d95;
+            border-color: #a78bfa;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(145deg, #9f7aea, #5f9eff);
+            transform: translateY(-3px);
+            box-shadow: 0 22px 28px -12px #6d28d9;
+            border-color: #c4b5fd;
+        }
+
+        .btn-outline {
+            background: rgba(60, 30, 100, 0.3);
+            color: #f0e4ff;
+            border-color: #7b68ee;
+        }
+
+        .btn-outline:hover {
+            background: rgba(110, 70, 180, 0.4);
+            border-color: #b69eff;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 18px 25px -12px #6240b0;
+        }
+
+        /* FOOTER */
+        .footer {
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed #5b3e85;
+            color: #ac99d9;
+            font-size: 1rem;
+        }
+
+        /* Gak bakal tembus kemana-mana */
+        @media (max-width: 800px) {
+            .card {
+                padding: 2.5rem 2rem;
+            }
+            .main-title {
+                font-size: 2.2rem;
+            }
+            .url-link {
+                font-size: 2.5rem;
+                padding: 0.3rem 1.2rem;
+            }
+            .btn {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+                min-width: 180px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 12px;
+            }
+            .card {
+                padding: 2rem 1.5rem;
+                border-radius: 50px 20px 50px 20px;
+            }
+            .card::before {
+                border-radius: 58px 28px 58px 28px;
+            }
+            .main-title {
+                font-size: 1.8rem;
+            }
+            .url-link {
+                font-size: 2rem;
+                padding: 0.2rem 1rem;
+                border-radius: 60px 18px 60px 18px;
+            }
+            .logo-container {
+                max-width: 200px;
+            }
+            .info-box {
+                padding: 1rem 1.2rem;
+                font-size: 1.1rem;
+            }
+            .info-highlight {
+                font-size: 1.2rem;
+            }
+            .button-group {
+                gap: 1rem;
+            }
+            .btn {
+                width: 100%;
+                min-width: unset;
+            }
+            .divider-icon {
+                font-size: 1.8rem;
+            }
+            .footer {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Untuk layar sangat kecil, semuanya tetap di tengah */
+        @media (max-width: 380px) {
+            .main-title {
+                font-size: 1.5rem;
+            }
+            .url-link {
+                font-size: 1.6rem;
+            }
+            .card {
+                padding: 1.5rem 1.2rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="master-wrapper">
+        <div class="card">
+            <div class="content">
+                <!-- LOGO - PRESISI TENGAH -->
+                <div class="logo-section">
+                    <div class="logo-frame">
+                        <div class="logo-container">
+                            <img 
+                                src="https://raw.githubusercontent.com/RahmadPasker/dat2/main/uploads/alip-clutch-1773885003149.jpg" 
+                                alt="Logo Rennmodz"
+                                onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22280%22%20height%3D%22180%22%20viewBox%3D%220%200%20280%20180%22%3E%3Crect%20width%3D%22280%22%20height%3D%22180%22%20fill%3D%22%23282051%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23b19cff%22%20font-size%3D%2220%22%20font-family%3D%22Arial%22%3ELOGO%3C%2Ftext%3E%3C%2Fsvg%3E';"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TEKS UTAMA -->
+                <div class="title-section">
+                    <div class="main-title">
+                        🔶 WEBSITE INI PINDAH KE 🔶
+                    </div>
+                    <div class="url-container">
+                        <a href="https://rennmodz.dongtube.my.id" class="url-link" target="_blank" rel="noopener noreferrer">
+                            rennmodz.dongtube.my.id
+                        </a>
+                    </div>
+                </div>
+
+                <!-- DIVIDER -->
+                <div class="divider-wrap">
+                    <div class="divider-line"></div>
+                    <div class="divider-icon">✈</div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- INFO PANEL -->
+                <div class="info-box">
+                    <span class="info-highlight">✈ alamat baru · simpan bookmark ✈</span>
+                    <br>
+                    <span class="info-tag">#rerouting #rennmodz</span>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="button-group">
+                    <a href="https://rennmodz.dongtube.my.id" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                        <span>➤</span> Buka Website Baru
+                    </a>
+                    <a href="https://rennmodz.dongtube.my.id" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+                        <span>○</span> Kunjungi Sekarang
+                    </a>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="footer">
+                    🌌 dirancang dengan spektrum ungu & biru · halaman pengalihan resmi
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+  </html>
